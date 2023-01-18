@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext, ReactNode } from 'react'
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { UserParams } from '../@types/navigation';
+import { UserParams } from '../@types/music';
 
 type UserContextProps = {
   children: ReactNode

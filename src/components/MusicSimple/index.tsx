@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { MusicParams } from '../../@types/navigation';
+
 import { BASE_API } from '../../service/api';
 
 const Container = styled.TouchableOpacity`
@@ -32,7 +32,14 @@ const MusicAuthor = styled.Text`
 `;
 
 interface PropsMusic {
-    data: MusicParams,
+    data: {
+        title: string,
+        cover: string,
+        author: {
+            name: string
+        },
+        date: Date
+    },
     onClick: () => void,
 } 
 

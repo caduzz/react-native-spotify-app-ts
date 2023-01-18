@@ -2,20 +2,19 @@ import React, { useContext } from 'react';
 
 import { MusicContext } from '../contexts/MusicContextProvider';
 
-import { MusicParams } from '../@types/navigation';
+import { MusicParams } from '../@types/music';
 
-import { pause, play, resume } from '../misc/audioController';
+import { pause, play, resume } from '../service/misc/audioController';
 
 import { api, BASE_API } from '../service/api';
 import { AVPlaybackStatus } from 'expo-av';
 import { UserContext } from '../contexts/UserContextProvider';
-import { schedulePushNotification } from '../service/schedulePushNotification';
+import { schedulePushNotification } from '../service/Notification/schedulePushNotification';
 
 
 export default () => {
     const { user } = useContext(UserContext);
     const { soundObj, playBackObj, currentSound, setStatus, updateValuesState } = useContext(MusicContext);
-
 
     const _onPlaybackStatusUpdate = (playbackStatus: AVPlaybackStatus, music: MusicParams) => {
         if (playbackStatus.isLoaded) {
@@ -30,15 +29,15 @@ export default () => {
         }
     };
 
+    
     const PlayMusic = async ( music : MusicParams  ) => {
         let uri = `${BASE_API}/music/${music.uri}`;
         
-        schedulePushNotification(music, 2)
-
         // Music Replay
         if(!soundObj || currentSound.id !== music.id) {
-            await playBackObj.unloadAsync();
+            playBackObj.unloadAsync();
             const status = await play(playBackObj, uri);
+            schedulePushNotification(music, 2)
             
             updateValuesState(
                 status,

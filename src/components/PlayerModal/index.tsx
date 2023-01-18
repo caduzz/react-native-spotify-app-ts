@@ -11,8 +11,7 @@ import SliderPlayer from '../SliderPlayer/indenx';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CaretDown, DotsThreeVertical, HeartStraight, MinusCircle, PauseCircle, PlayCircle, SkipBack, SkipForward } from 'phosphor-react-native';
 
-import { pause, resume } from '../../misc/audioController';
-import { convertTimer, converterMsEmSec } from '../../misc/numberConvert';
+import { convertTimer, converterMsEmSec } from '../../service/misc/numberConvert';
 
 import { BASE_API } from '../../service/api';
 import useHandleMusicPlayer from '../../hooks/useHandleMusicPlayer';

@@ -21,7 +21,7 @@ import MusicContent from '../../components/MusicContent';
 import { api } from '../../service/api';
 
 
-import { MusicParams } from '../../@types/navigation';
+import { MusicParams } from '../../@types/music';
 import { Loading } from '../../components/Loading';
 
 export default () => {

@@ -23,7 +23,7 @@ import {
 import { ArrowLeft, Heart, PauseCircle, PlayCircle } from 'phosphor-react-native';
 
 import { MusicContext } from '../../contexts/MusicContextProvider';
-import { MusicParams } from '../../@types/navigation';
+import { MusicParams } from '../../@types/music';
 
 import { LinearGradient } from 'expo-linear-gradient';
 

@@ -5,16 +5,18 @@ import { NavigationContainer } from '@react-navigation/native'
 import AppRoute from './app.routes'
 import AuthRoutes from './auth.routes'
 
-import { api } from '../service/api'
-import { MusicContext } from '../contexts/MusicContextProvider'
+import { Audio } from 'expo-av'
 
+import { UserParams } from '../@types/music'
+import { api } from '../service/api'
+
+import { MusicContext } from '../contexts/MusicContextProvider'
 import { UserContext } from '../contexts/UserContextProvider'
-import { UserParams } from '../@types/navigation'
+
 import { useAsyncStorage } from '@react-native-async-storage/async-storage'
 
 import PlayerModal from '../components/PlayerModal'
 import { Loading } from '../components/Loading'
-import { Audio } from 'expo-av'
 
 
 export function Routes() {

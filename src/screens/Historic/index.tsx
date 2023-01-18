@@ -12,7 +12,7 @@ import {
   BtnBack,
   ScrollHitoricMusic
 } from './styles';
-import { MusicParams } from '../../@types/navigation';
+import { MusicParams } from '../../@types/music';
 import { api } from '../../service/api';
 import { UserContext } from '../../contexts/UserContextProvider';
 

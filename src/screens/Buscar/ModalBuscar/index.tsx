@@ -1,11 +1,10 @@
-import { MusicParams } from '../../../@types/navigation';
-
 import styled from 'styled-components/native';
 
 import { ArrowLeft } from 'phosphor-react-native';
 
-import MusicSimple from '../../../components/MusicSimple';
+import { MusicParams } from '../../../@types/music';
 
+import MusicSimple from '../../../components/MusicSimple';
 
 const Content = styled.View`
     width: 100%;

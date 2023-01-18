@@ -3,13 +3,13 @@ import styled from 'styled-components/native';
 
 import { HeartStraight } from 'phosphor-react-native';
 
-import { MusicParams } from '../../@types/navigation';
-import { MusicContext } from '../../contexts/MusicContextProvider';
+import { MusicParams } from '../../@types/music';
 
-import { convertTimer, converterMsEmSec } from '../../misc/numberConvert';
-import SliderPlayer from '../SliderPlayer/indenx';
+import { convertTimer } from '../../service/misc/numberConvert';
 import { BASE_API } from '../../service/api';
 import { AVPlaybackStatus } from 'expo-av';
+
+import SliderPlayer from '../SliderPlayer/indenx';
 
 export interface PlayerProps {
     bgColor: string
@@ -76,6 +76,7 @@ interface PlayerParams {
 const PlayerWidget = ({ music, children, openModal, onClick, soundObj }: PlayerParams) => {
     return (
         <Container>
+            { music.published &&
             <Widget
                 activeOpacity={1} 
                 onPress={openModal} 
@@ -109,7 +110,7 @@ const PlayerWidget = ({ music, children, openModal, onClick, soundObj }: PlayerP
                     value={convertTimer(soundObj)}
                 />
             </Widget>
-            
+            }
         </Container>
     );
 }

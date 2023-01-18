@@ -1,8 +1,8 @@
-import { useState, createContext, ReactNode, useEffect } from 'react'
+import { useState, createContext, ReactNode, useEffect, useCallback } from 'react'
 
 import { Audio, AVPlaybackStatus } from 'expo-av';
 
-import { MusicParams } from '../@types/navigation';
+import { MusicParams } from '../@types/music';
 import { Sound } from 'expo-av/build/Audio';
 
 type MusicContextProps = {
@@ -36,7 +36,7 @@ export const MusicContextProvider = ({ children }: MusicContextProps) => {
   const [ soundObj, setSoundObj ] = useState<AVPlaybackStatus>(initialValue.soundObj);
   const [ playBackObj, setPlayBackObj ] = useState<Audio.Sound>(initialValue.playBackObj);
   const [ currentSound, setCurrentSound ] = useState<MusicParams>(initialValue.currentSound);
-  const [musicModal, openMusicModal] = useState(initialValue.musicModal)
+  const [ musicModal, openMusicModal ] = useState(initialValue.musicModal)
 
   const setMusicModal = (value: boolean) => {
     openMusicModal(value)

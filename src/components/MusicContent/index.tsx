@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/native';
-import { MusicParams } from '../../@types/navigation';
+import { MusicParams } from '../../@types/music';
 import { BASE_API } from '../../service/api';
 
 export const Container = styled.TouchableOpacity`

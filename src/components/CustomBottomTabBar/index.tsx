@@ -5,7 +5,7 @@ import { House, MagnifyingGlass, Pause, Play, Playlist, SpotifyLogo } from 'phos
 import { LinearGradient } from 'expo-linear-gradient';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
-import PlayerWidget from '../PlayerWidget/indenx';
+import PlayerWidget from '../PlayerWidget';
 
 import { MusicContext } from '../../contexts/MusicContextProvider';
 import useHandleMusicPlayer from '../../hooks/useHandleMusicPlayer';

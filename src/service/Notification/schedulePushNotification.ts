@@ -1,5 +1,5 @@
 import * as Notifications from 'expo-notifications'
-import { MusicParams } from '../@types/navigation';
+import { MusicParams } from '../../@types/music';
 
 import { converterMsEmSec } from '../misc/numberConvert';
 

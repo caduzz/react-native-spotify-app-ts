@@ -8,8 +8,8 @@ import { Routes } from './src/routes';
 
 import * as Notifications from 'expo-notifications'
 
-import './src/service/notificationsConfigs'
-import { registerForPushNotificationsAsync } from './src/service/getPushNotificationToken'
+import './src/service/Notification/configs'
+import { registerForPushNotificationsAsync } from './src/service/Notification/getPushNotificationToken'
 import { Subscription } from 'expo-modules-core';
 
 export default function App() {
@@ -28,10 +28,7 @@ export default function App() {
         setNotification(notification);
       });
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {});
 
     return () => {
       if(notificationListener.current && responseListener.current){

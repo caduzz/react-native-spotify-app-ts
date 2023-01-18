@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { MagnifyingGlass } from 'phosphor-react-native';
-import { MusicParams } from '../../@types/navigation';
+import { MusicParams } from '../../@types/music';
 
 import ModalBuscar from './ModalBuscar';
 
