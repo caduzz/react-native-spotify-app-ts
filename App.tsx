@@ -1,63 +1,54 @@
-import { useContext, useEffect, useRef } from 'react';
-import { StatusBar } from 'react-native';
-import { 
-  useFonts,
-  Inter_400Regular,
-  Inter_600SemiBold,
-  Inter_700Bold,
-  Inter_900Black
-} from '@expo-google-fonts/inter';
-import { Subscription } from 'expo-modules-core';
-import * as Notifications from 'expo-notifications'
+import { useEffect, useRef, useState } from 'react';
+import { StatusBar, View } from 'react-native';
+
+import { MusicContextProvider } from './src/contexts/MusicContextProvider';
+import { UserContextProvider } from './src/contexts/UserContextProvider';
 
 import { Routes } from './src/routes';
 
-import './src/service/notificationsConfigs';
-import { getPushNotificationToken } from './src/service/getPushNotificationToken';
-import { Loading } from './src/components/Loading';
-import { MusicContextProvider } from './src/contexts/MusicContextProvider';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Notifications from 'expo-notifications'
+
+import './src/service/notificationsConfigs'
+import { registerForPushNotificationsAsync } from './src/service/getPushNotificationToken'
+import { Subscription } from 'expo-modules-core';
 
 export default function App() {
-  const getPushNotificationListner = useRef<Subscription>();
-  const responseNotificationListner = useRef<Subscription>();
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState<Notifications.Notification>();
+  const notificationListener = useRef<Subscription>();
+  const responseListener = useRef<Subscription>();
 
-  const [ fontsLoaded ] = useFonts({
-    Inter_400Regular,
-    Inter_600SemiBold,
-    Inter_700Bold,
-    Inter_900Black
-  });
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(({ token }) =>{
+      if(token) setExpoPushToken(token)
+    });
 
-  useEffect(()=>{
-    getPushNotificationToken();
-  }, [])
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
 
-  useEffect(()=>{
-      getPushNotificationListner.current = Notifications.
-      addNotificationReceivedListener(notfication => {})
-      
-      responseNotificationListner.current = Notifications
-      .addNotificationResponseReceivedListener(notfication => {})
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
 
-      return () => {
-        if(getPushNotificationListner.current && responseNotificationListner.current){
-          Notifications.removeNotificationSubscription(getPushNotificationListner.current)
-          Notifications.removeNotificationSubscription(responseNotificationListner.current)
-        }
+    return () => {
+      if(notificationListener.current && responseListener.current){
+        Notifications.removeNotificationSubscription(notificationListener.current);
+        Notifications.removeNotificationSubscription(responseListener.current);
       }
-  }, [])
+    };
+  }, []);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#121214'}}>
-      <MusicContextProvider>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="#1a1a1a"
-          translucent
-        />
-        {fontsLoaded ? <Routes/> : <Loading size='large' color='#fff'/> }
-      </MusicContextProvider>
-    </SafeAreaView>
+    <View style={{flex: 1, backgroundColor: '#121214'}}>
+      <StatusBar translucent={false} backgroundColor='#111'/>
+      <UserContextProvider>
+        <MusicContextProvider>
+          <Routes /> 
+        </MusicContextProvider>
+      </UserContextProvider>
+    </View>
   );
 }

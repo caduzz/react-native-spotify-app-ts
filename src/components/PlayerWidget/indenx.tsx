@@ -1,4 +1,4 @@
-import { ReactNode, useContext } from 'react'
+import React, { ReactNode, useContext } from 'react'
 import styled from 'styled-components/native';
 
 import { HeartStraight } from 'phosphor-react-native';
@@ -7,28 +7,29 @@ import { MusicParams } from '../../@types/navigation';
 import { MusicContext } from '../../contexts/MusicContextProvider';
 
 import { convertTimer, converterMsEmSec } from '../../misc/numberConvert';
-import SliderPlayer from './SliderPlayer/indenx';
+import SliderPlayer from '../SliderPlayer/indenx';
 import { BASE_API } from '../../service/api';
+import { AVPlaybackStatus } from 'expo-av';
 
 export interface PlayerProps {
     bgColor: string
 }
 
-const Container = styled.TouchableOpacity`
+const Container = styled.View`
     width: 100%;
     padding-left: 10px;
     padding-right: 10px;
 `
-const MusicArea = styled.View`
-    padding: 0 10px;
-    padding-top: 10px;
+const Widget = styled.TouchableOpacity`
+    padding: 0 8px;
+    padding-top: 8px;
     border-radius: 5px;
     flex-direction: column;
     background-color: ${ (p: PlayerProps) => p.bgColor};
 `; 
 
 const MusicContent = styled.View`
-    padding-bottom: 7px;
+    padding-bottom: 5px;
     flex: 1;
     padding-right: 15px;
     flex-direction: row;
@@ -55,33 +56,34 @@ const MusicName = styled.Text`
     color: #fff;
     font-weight: bold;
 `
-const MusicDuration = styled.Text`
-    color: #fff;
-`
 const MusicNameAuthor = styled.Text`
     color: #ddd;
 `
 const BtnActions = styled.TouchableOpacity`
     color: #fff;
+    margin: 0px;
     margin-left: 10px;
 `
 
 interface PlayerParams {
     music: MusicParams,
     children: ReactNode,
+    soundObj: AVPlaybackStatus,
     openModal: () => void,
-    onClick: () => void,
+    onClick: (music: MusicParams) => void,
 }
 
-const PlayerWidget = ({ music, children, openModal, onClick }: PlayerParams) => {
-    const { soundObj } = useContext(MusicContext);
-
+const PlayerWidget = ({ music, children, openModal, onClick, soundObj }: PlayerParams) => {
     return (
-        <Container onPress={openModal} activeOpacity={0.8}>
-            <MusicArea bgColor={music.color}>
+        <Container>
+            <Widget
+                activeOpacity={1} 
+                onPress={openModal} 
+                bgColor={music.color}
+            >
                 <MusicContent>
                     <MusicInfos>
-                        <MusicCover source={{uri: `${BASE_API}/music/cover/${music.cover}?resize=150`}}/>
+                        <MusicCover source={{uri: `${BASE_API}/music/cover/${music.cover}?resize=20`}}/>
                         <MusicTextArea>
                             <MusicName>
                                 {music.title}
@@ -92,13 +94,8 @@ const PlayerWidget = ({ music, children, openModal, onClick }: PlayerParams) => 
                         </MusicTextArea>
                     </MusicInfos>
                     <MusicInfos>
-                        {soundObj.isLoaded &&
-                            <MusicDuration>
-                                {converterMsEmSec(soundObj.positionMillis)}
-                            </MusicDuration>
-                        }
                         <BtnActions>
-                            <HeartStraight weight='regular' size={28} color="#fff"/>
+                            <HeartStraight weight='regular' size={26} color="#fff"/>
                         </BtnActions>
                         <BtnActions onPress={onClick}>
                             { children }
@@ -106,11 +103,12 @@ const PlayerWidget = ({ music, children, openModal, onClick }: PlayerParams) => 
                     </MusicInfos>
                 </MusicContent>
                 <SliderPlayer
-                    maximumTintColor='#fff8'
+                    maximumTintColor='#fff7'
                     minimumTintColor='#fff'
+                    height={2}
                     value={convertTimer(soundObj)}
                 />
-            </MusicArea>
+            </Widget>
             
         </Container>
     );

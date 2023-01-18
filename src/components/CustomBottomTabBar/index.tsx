@@ -1,14 +1,14 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components/native';
 
-import { LinearGradient } from 'expo-linear-gradient';
-
 import { House, MagnifyingGlass, Pause, Play, Playlist, SpotifyLogo } from 'phosphor-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+
 import PlayerWidget from '../PlayerWidget/indenx';
+
 import { MusicContext } from '../../contexts/MusicContextProvider';
-import PlayerModal from '../PlayerModal';
-import { pause, resume } from '../../misc/audioController';
+import useHandleMusicPlayer from '../../hooks/useHandleMusicPlayer';
 
 const MainTab = styled.View`
     bottom: 0;
@@ -33,41 +33,43 @@ const TitleTab = styled.Text`
 `;
 
 const CustomBottomTabBar = ({ state, navigation }: BottomTabBarProps) => {
-    const {soundObj, currentSound, playBackObj, setMusicModal, setStatus} = useContext(MusicContext);
+    const {soundObj, currentSound, musicModal, setMusicModal} = useContext(MusicContext);
+
+    const playMusic = useHandleMusicPlayer()
 
     const goTo = (screenName: string) => {
         navigation.navigate(screenName);
     }
 
-    const playMusic = async () => {
-        if(soundObj.isLoaded && soundObj.isPlaying){
-          const status = await pause(playBackObj)
-          return setStatus(status)
-        }
-    
-        if(soundObj.isLoaded && !soundObj.isPlaying){
-          const status = await resume(playBackObj);
-          return setStatus(status)
-        }
-    }
-
     return (
         <MainTab>
-            {soundObj.isLoaded &&
-                <PlayerWidget
-                    onClick={playMusic}
-                    openModal={()=>setMusicModal(true)}
-                    music={currentSound}
+            <LinearGradient 
+                style={{
+                    flex: 1,
+                    paddingTop: 15,
+                    flexDirection: 'column',
+                    justifyContent: 'space-between'
+                }} 
+                colors={['#0000', '#000']}
+
+            >
+                {soundObj.isLoaded && !musicModal &&
+                    <PlayerWidget
+                        onClick={()=>playMusic(currentSound)}
+                        openModal={()=>setMusicModal(true)}
+                        music={currentSound}
+                        soundObj={soundObj}
+                    >
+                        {!soundObj.isPlaying ?
+                            <Play weight='fill' size={26} color='#fff'/>
+                            :
+                            <Pause weight='fill' size={26} color='#fff'/>
+                        }
+                    </PlayerWidget>
+                }
+                <TabArea
+                    pointerEvents='box-none'
                 >
-                    {!soundObj.isPlaying ?
-                        <Play weight='fill' size={22} color='#fff'/>
-                        :
-                        <Pause weight='fill' size={22} color='#fff'/>
-                    }
-                </PlayerWidget>
-            }
-            <TabArea>
-                <LinearGradient style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} colors={['#0001', '#000']} >
                     <TabItem
                         onPress={()=>goTo('inicio')}
                     >
@@ -112,9 +114,8 @@ const CustomBottomTabBar = ({ state, navigation }: BottomTabBarProps) => {
                             Premium
                         </TitleTab>
                     </TabItem>
-                </LinearGradient>
-            </TabArea>
-
+                </TabArea>
+            </LinearGradient>
         </MainTab>
     );
 }

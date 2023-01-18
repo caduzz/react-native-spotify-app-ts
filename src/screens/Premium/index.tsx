@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Container,
   Scroller
@@ -12,6 +14,3 @@ export default () => {
     </Container>
   );
 }
-/*
-
-*/

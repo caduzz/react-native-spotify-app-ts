@@ -3,6 +3,7 @@ import { useState, createContext, ReactNode, useEffect } from 'react'
 import { Audio, AVPlaybackStatus } from 'expo-av';
 
 import { MusicParams } from '../@types/navigation';
+import { Sound } from 'expo-av/build/Audio';
 
 type MusicContextProps = {
   children: ReactNode
@@ -10,23 +11,23 @@ type MusicContextProps = {
 
 type MusicContextType = {
   soundObj: AVPlaybackStatus, 
-  playBackObj: Audio.Sound,
+  playBackObj: Sound,
   currentSound: MusicParams,
   musicModal: boolean,
+  setMusicModal: (value: boolean) => void, 
   updateValuesState: (status: AVPlaybackStatus, play: Audio.Sound, music: MusicParams) => void,
-  setStatus: (status: AVPlaybackStatus) => void ,
-  setMusicModal: (value: boolean) => void,
+  setStatus: (status: AVPlaybackStatus) => void,
 }
 
 const initialValue = {
-  soundObj: {}, 
+  soundObj: {isLoaded: false}, 
   playBackObj: new Audio.Sound(),
-  currentSound: {},
+  currentSound: {author: {id:'', name: ''}, color: '', cover: '', duration: 0, id: '', title: '', uri: '', published: false, date: new Date()},
   musicModal: false,
+  setMusicModal: () => {}, 
   updateValuesState: () => {},
-  setStatus: () => {},
-  setMusicModal: () => {},
-} 
+  setStatus: () => {}
+} as MusicContextType
 
 
 export const MusicContext = createContext<MusicContextType>(initialValue);
@@ -35,15 +36,15 @@ export const MusicContextProvider = ({ children }: MusicContextProps) => {
   const [ soundObj, setSoundObj ] = useState<AVPlaybackStatus>(initialValue.soundObj);
   const [ playBackObj, setPlayBackObj ] = useState<Audio.Sound>(initialValue.playBackObj);
   const [ currentSound, setCurrentSound ] = useState<MusicParams>(initialValue.currentSound);
-  const [ musicModal, setMusicOpen ] = useState<boolean>(initialValue.musicModal);
+  const [musicModal, openMusicModal] = useState(initialValue.musicModal)
 
   const setMusicModal = (value: boolean) => {
-    setMusicOpen(value)
+    openMusicModal(value)
   }
 
-  const updateValuesState = (status: AVPlaybackStatus, play: Audio.Sound, music: MusicParams) => {
+  const updateValuesState = (status: AVPlaybackStatus, play: Sound, music: MusicParams) => {
     setCurrentSound(music);
-    setPlayBackObj(play); 
+    setPlayBackObj(play);
     setSoundObj(status);
   }
 
@@ -54,16 +55,16 @@ export const MusicContextProvider = ({ children }: MusicContextProps) => {
   return (
       <MusicContext.Provider
         value={{ 
-            soundObj,
-            playBackObj,
-            currentSound,
-            musicModal,
-            setStatus,
-            updateValuesState,
-            setMusicModal,
+          soundObj,
+          playBackObj,
+          currentSound,
+          musicModal,
+          setMusicModal,
+          setStatus,
+          updateValuesState,
         }}
       >
           {children}
       </MusicContext.Provider>
-  );
+  ); 
 }

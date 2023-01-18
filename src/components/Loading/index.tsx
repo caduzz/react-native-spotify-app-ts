@@ -10,6 +10,7 @@ export function Loading({...rest}: LoadingProps ) {
     <View style={styles.container}>
         <ActivityIndicator
             color={THEME.COLORS.PRIMARY}
+            size='large'
             {...rest}
         />
     </View>

@@ -1,22 +1,28 @@
-import styled from 'styled-components/native';
+import React, { useContext } from 'react';
 
 import { Modal, ModalProps, StatusBar } from 'react-native';
+
+import styled from 'styled-components/native';
+
+import { MusicContext } from '../../contexts/MusicContextProvider';
+
+import SliderPlayer from '../SliderPlayer/indenx';
+
 import { LinearGradient } from 'expo-linear-gradient';
 import { CaretDown, DotsThreeVertical, HeartStraight, MinusCircle, PauseCircle, PlayCircle, SkipBack, SkipForward } from 'phosphor-react-native';
 
-import Slider from '@react-native-community/slider';
-
-import { convertTimer, converterMsEmSec } from '../../misc/numberConvert';
 import { pause, resume } from '../../misc/audioController';
-import { useContext } from 'react';
-import { MusicContext } from '../../contexts/MusicContextProvider';
+import { convertTimer, converterMsEmSec } from '../../misc/numberConvert';
+
 import { BASE_API } from '../../service/api';
+import useHandleMusicPlayer from '../../hooks/useHandleMusicPlayer';
+
 
 export interface PlayerProps {
     bgColor: string
 }
 
-const PlayerModalArea = styled.View`
+const PlayerModalArea = styled.SafeAreaView`
     flex: 1;
 `; 
 
@@ -32,14 +38,26 @@ const BtnCloseModal = styled.TouchableOpacity``;
 const MusicInfo = styled.View`
     align-items: center;
 `;
-const MusicAuthor = styled.Text`
-    color: #fff;
-    font-size: 14px;
-`;
-const MusicName = styled.Text`
+const MusicAuthorTop = styled.Text`
     color: #fff;
     font-size: 14px;
     font-weight: bold;
+    text-transform: capitalize;
+`;
+const MusicText = styled.Text`
+    color: #fff;
+    font-size: 14px;
+`;
+
+const MusicName = styled.Text`
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+`;
+const MusicAuthor = styled.Text`
+    color: #fff8;
+    font-size: 15px;
+    text-transform: capitalize;
 `;
 
 const PlayerModalBody = styled.View`
@@ -47,26 +65,32 @@ const PlayerModalBody = styled.View`
     align-items: center;
 `;
 const PlayerModalCover = styled.Image`
-    width: 320px;
-    height: 320px;
+    width: 300px;
+    height: 300px;
 `;
 
 const MusicTextInfos = styled.View`
     width: 100%;
     padding: 10px 30px;
+    padding-top: 12px;
 `;
 
 const PlayerSlideArea = styled.View`
     padding: 4px 15px;
+    padding-top: 12px;
     width: 100%;
 `;
+const SlideContent = styled.View`
+    padding: 8px 15px;
+`
 const PlayerTimeArea = styled.View`
-    padding: 0 20px;
+    padding: 0 15px;
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
 `;
 const TimerText = styled.Text`
+    font-size: 12px;
     color: #fff;
 `;
 
@@ -83,45 +107,27 @@ const PlayerOptionsContent = styled.View`
     align-items: center;
     justify-content: space-between;
 `;
-const PlayerOptionsBtn = styled.TouchableOpacity`
-`;
+const PlayerOptionsBtn = styled.TouchableOpacity``;
 
 
 interface PlayerParams extends ModalProps {
 }
 
 const PlayerModal = ({ ...rest }: PlayerParams) => {
+    const {currentSound, soundObj, setMusicModal} = useContext(MusicContext);
 
-    const {currentSound, soundObj, playBackObj, setMusicModal, setStatus} = useContext(MusicContext);
-
-    const setPosition = async (value: number) => {
-        const res = (currentSound.duration * value) / 100
-        const status = await playBackObj.setPositionAsync(res)
-        setStatus(status)
-    }
-
-    const playMusic = async () => {
-        if(soundObj.isLoaded && soundObj.isPlaying){
-            const status = await pause(playBackObj)
-            return setStatus(status)
-        }
-            
-        if(soundObj.isLoaded && !soundObj.isPlaying){
-            const status = await resume(playBackObj);
-            return setStatus(status)
-        }
-    }
+    const playMusic = useHandleMusicPlayer();
 
     return (
         <Modal
             animationType='slide'
             {...rest}
         >
-            <StatusBar translucent backgroundColor={currentSound.color}/>
+            <StatusBar backgroundColor={currentSound.color}/>
             <LinearGradient
                 style={{
-                    flex: 1
-                }} 
+                    flex: 1,
+                }}
                 colors={[currentSound.color, '#141012']}
             >
                 <PlayerModalArea>
@@ -131,8 +137,8 @@ const PlayerModal = ({ ...rest }: PlayerParams) => {
                         </BtnCloseModal>
 
                         <MusicInfo>
-                            <MusicName>{currentSound.title}</MusicName>
-                            <MusicAuthor>{currentSound.author.name}</MusicAuthor>
+                            <MusicText>{currentSound.title}</MusicText>
+                            <MusicAuthorTop>{currentSound.author.name}</MusicAuthorTop>
                         </MusicInfo>
 
                         <BtnCloseModal>
@@ -140,7 +146,9 @@ const PlayerModal = ({ ...rest }: PlayerParams) => {
                         </BtnCloseModal>
                     </PlayerModalHeader>
                     <PlayerModalBody>
-                        <PlayerModalCover source={{uri: `${BASE_API}/music/cover/${currentSound.cover}?resize=550`}}/>
+                        <PlayerModalCover 
+                            source={{uri: `${BASE_API}/music/cover/${currentSound.cover}?resize=120`}}
+                        />
 
                         <MusicTextInfos>
                             <MusicName>{currentSound.title}</MusicName>
@@ -148,20 +156,15 @@ const PlayerModal = ({ ...rest }: PlayerParams) => {
                         </MusicTextInfos>
 
                         <PlayerSlideArea>
-                            <Slider
-                                value={convertTimer(soundObj)}
-                                onSlidingComplete={(value)=>setPosition(value)}
-                                minimumValue={0}
-                                maximumValue={100}
-                                thumbTintColor='#fff'
-                                maximumTrackTintColor='#fff'
-                                minimumTrackTintColor='#fff'
-                                style={{
-                                    width: '100%',
-                                    padding: 0
-                                }}
-                            />
-
+                            <SlideContent>
+                                <SliderPlayer
+                                    maximumTintColor='#fff3'
+                                    minimumTintColor='#fff'
+                                    playerCircle={true}
+                                    height={3}
+                                    value={convertTimer(soundObj)}
+                                />
+                            </SlideContent>
                             {soundObj.isLoaded &&
                                 <PlayerTimeArea>
                                     <TimerText>
@@ -184,11 +187,11 @@ const PlayerModal = ({ ...rest }: PlayerParams) => {
                                     <SkipBack weight='fill' size={30} color='#fff'/>
                                 </PlayerOptionsBtn>
 
-                                <PlayerOptionsBtn onPress={playMusic}>
+                                <PlayerOptionsBtn style={{paddingHorizontal: 15}} onPress={()=>playMusic(currentSound)}>
                                     {soundObj.isLoaded && soundObj.isPlaying ?
-                                        <PauseCircle weight='fill' color='#fff' size={70}/>
+                                        <PauseCircle weight='fill' color='#fff' size={75}/>
                                         :
-                                        <PlayCircle weight='fill' color='#fff' size={70}/>
+                                        <PlayCircle weight='fill' color='#fff' size={75}/>
                                     }
                                 </PlayerOptionsBtn>
 

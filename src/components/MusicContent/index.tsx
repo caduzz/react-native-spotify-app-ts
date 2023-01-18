@@ -25,7 +25,7 @@ interface PropsMusic {
 const MusicContent = ({ data, onClick }: PropsMusic) => {
     return (
         <Container onPress={onClick} activeOpacity={0.9}>
-            <CoverMusic source={{uri: `${BASE_API}/music/cover/${data.cover}?resize=300`}} />
+            <CoverMusic source={{uri: `${BASE_API}/music/cover/${data.cover}?resize=100`}} />
             <MusicName>
                 {data.title}
             </MusicName>

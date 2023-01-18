@@ -1,9 +1,10 @@
+import { MusicParams } from '../../../@types/navigation';
+
 import styled from 'styled-components/native';
 
 import { ArrowLeft } from 'phosphor-react-native';
-import { MusicParams } from '../../../@types/navigation';
 
-import MusicBuscar from './MusicBuscar';
+import MusicSimple from '../../../components/MusicSimple';
 
 
 const Content = styled.View`
@@ -41,9 +42,9 @@ const WarningText = styled.Text`
 `
 
 interface ModalParams {
-    closeModal: ()=>void
-    buscar: (value: string)=>void,
-    navigate: (music: MusicParams)=>void,
+    closeModal: () => void
+    buscar: (value: string) => void,
+    navigate: (music: MusicParams) => void,
     music: MusicParams[]
 }
 
@@ -60,16 +61,15 @@ const ModalBuscar = ({ closeModal, buscar, navigate, music  }: ModalParams) => {
                     placeholder='O que você quer ouvir'
                     selectionColor='#1DB954'
                     placeholderTextColor='#ddd'
-                />
-                    
+                />  
             </SearchArea>
             {music.length > 0 ?
                 <AreaMusic 
                     data={music}
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item: MusicParams) => item.id}
-                    renderItem={({item}: {item: MusicParams}) => (  
-                        <MusicBuscar
+                    showsHorizontalScrollIndicator={true}
+                    keyExtractor={(item : MusicParams) => item.id}
+                    renderItem={({ item } : { item: MusicParams }) => (  
+                        <MusicSimple
                             data={item}
                             onClick={()=>navigate(item)}
                         />

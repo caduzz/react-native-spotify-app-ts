@@ -3,7 +3,7 @@ import { Audio, AVPlaybackStatus, AVPlaybackStatusError } from "expo-av";
 // play audio
 export const play = async (playBackObj: Audio.Sound, uri: string) : Promise<AVPlaybackStatus> => {
     try {
-        return await playBackObj.loadAsync( { uri }, { shouldPlay: true });
+        return await playBackObj.loadAsync( { uri }, {shouldPlay: true} );
     } catch ({message}){
         const err: AVPlaybackStatusError = {
             isLoaded: false,
@@ -13,6 +13,21 @@ export const play = async (playBackObj: Audio.Sound, uri: string) : Promise<AVPl
         return err;
     }
 }
+
+// replay audio
+export const replay = async (playBackObj: Audio.Sound) : Promise<AVPlaybackStatus> => {
+    try {
+        return await playBackObj.replayAsync();
+    } catch ({message}){
+        const err: AVPlaybackStatusError = {
+            isLoaded: false,
+            androidImplementation: 'erro ao pausar na musica',
+            error: String(message)
+        }
+        return err;
+    }
+}
+
 
 // pause audio
 export const pause = async (playBackObj: Audio.Sound) : Promise<AVPlaybackStatus> => {

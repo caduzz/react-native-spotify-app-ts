@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -18,6 +18,7 @@ import {
   BtnText
 
 } from './styles';
+import { useSafeArea } from 'react-native-safe-area-context';
 
 
 export default () => {
@@ -32,7 +33,7 @@ export default () => {
 
   const Search = async (text: string) => {
     if(text !== ''){
-      const data = await api.serash(text);
+      const data = await api.searsh(text);
       setSearchMusic(data); 
     }else{
       setSearchMusic([])
@@ -41,28 +42,25 @@ export default () => {
 
   return (
     <Container>
-        <Header>
-          <HeaderTitle>
-            Buscar
-          </HeaderTitle>
-          <BtnSearch onPress={()=>setOpenModal(true)} activeOpacity={0.9}>
-            <MagnifyingGlass size={25} weight='bold'/>
-            <BtnText>
-              O que você quer ouvir
-            </BtnText>
-          </BtnSearch>
-        </Header>
-      {openModal &&
+      <Header>
+        <HeaderTitle>
+          Buscar
+        </HeaderTitle>
+        <BtnSearch onPress={()=>setOpenModal(true)} activeOpacity={0.9}>
+          <MagnifyingGlass size={25} weight='bold'/>
+          <BtnText>
+            O que você quer ouvir
+          </BtnText>
+        </BtnSearch>
+      </Header>
+      {openModal &&  
         <ModalBuscar
           navigate={playSound}
-          music={searchMusic} 
-          closeModal={()=>setOpenModal(false)} 
+          music={searchMusic}
+          closeModal={()=>setOpenModal(false)}
           buscar={Search}
-        />  
+        />
       }
     </Container>
   );
 }
-/*
-
-*/

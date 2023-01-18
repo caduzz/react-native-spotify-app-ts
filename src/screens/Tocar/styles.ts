@@ -10,19 +10,22 @@ export const Scroller = styled.ScrollView`
 
 export const BtnBack = styled.TouchableOpacity`
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 15px;
+    left: 15px;
 `;
 
 export const MusicHeader = styled.View`
     width: 100%;
-    padding-top: 30px;
+    padding-top: 15px;
     align-items: center;
     justify-content: center;
 `;
-export const MusicCover = styled.ImageBackground`
-    width: 200px;
-    height: 200px;
+export const ImageThumb = styled.View`
+    box-shadow: #0005 4px 5px 20px;
+`;
+export const MusicCover = styled.Image`
+    width: 180px;
+    height: 180px;
 `;
 export const MusicInfo = styled.View`
     margin-top: 15px;
@@ -30,16 +33,21 @@ export const MusicInfo = styled.View`
     align-items: flex-start;
     justify-content: center;
     padding: 0 20px;
-
 `;
 export const MusicTitle = styled.Text`
-    color: #adadad;
-    font-size: 14px;
+    color: #fff;
+    font-size: 23px;
+    font-weight: bold;
 `;
 export const MusicAuthor = styled.Text`
     color: #FFF;
     font-weight: bold;
     font-size: 16px;
+`;
+export const MusicDuration = styled.Text`
+    color: #d8d8d8;
+    font-weight: light;
+    font-size: 12px;
 `;
 
 export const MusicContent = styled.View`

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RefreshControl } from 'react-native';
+import { RefreshControl, StatusBar } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -15,7 +15,7 @@ import {
   ScrollMusic,
 } from './styles';
 
-import { Bell, Clock, Gear } from 'phosphor-react-native';
+  import { Bell, Gear, ClockClockwise } from 'phosphor-react-native';
 import MusicContent from '../../components/MusicContent';
 
 import { api } from '../../service/api';
@@ -36,6 +36,10 @@ export default () => {
     navigation.navigate('tocar', music)
   }
 
+  const navegar = () => {
+    navigation.navigate('historic')
+  }
+
   const searshMusics = async () => {
     setLoading(true)
     const res = await api.music();
@@ -49,20 +53,11 @@ export default () => {
   }
   
   const getHora = () => {
-    const date = new Date().toLocaleTimeString();
-
-    if(date > '18:00:00' && date < '23:59:59'){
-      return 'Boa noite'
-    }
-    
-    if(date <= '11:59:59'){
-      return 'Bom dia'
-    }
-
-    if(date >= '10:59:59'){
-      return 'Boa tarde'
-    }
-
+    let horaAtual = new Date().getHours();
+    if (horaAtual <= 5) return 'Boa Noite';
+    if (horaAtual < 12) return 'Bom dia';
+    if (horaAtual < 18) return 'Boa tarde';
+    return 'Boa noite';
   }
 
   useEffect(() => {
@@ -71,6 +66,10 @@ export default () => {
 
   return (
     <Container>
+      <StatusBar translucent={false} backgroundColor='#000'/>
+      {loading ?
+        <Loading size='large' color='#1db954'/>
+        :
       <Scroller
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -82,20 +81,16 @@ export default () => {
           </HeaderTitle>
           <HeaderOptions>
             <HeaderIcon>
-              <Bell size={26} weight={'bold'} color='#fff'/>
+              <Bell size={26} weight='bold' color='#fff'/>
+            </HeaderIcon>
+            <HeaderIcon onPress={navegar}>
+              <ClockClockwise size={26} weight='bold' color='#fff'/>
             </HeaderIcon>
             <HeaderIcon>
-              <Clock size={26} weight={'bold'} color='#fff'/>
-            </HeaderIcon>
-            <HeaderIcon>
-              <Gear size={26} weight={'bold'} color='#fff'/>
+              <Gear size={26} weight='bold' color='#fff'/>
             </HeaderIcon>
           </HeaderOptions>
         </Header>
-
-        {loading ?
-          <Loading size='large' color='#fff'/>
-          :
           <ScrollMusic
             data={musics}
             horizontal
@@ -112,11 +107,8 @@ export default () => {
             }}
           > 
           </ScrollMusic>
-        }
       </Scroller>
+      }
     </Container>
   );
 }
-/*
-
-*/

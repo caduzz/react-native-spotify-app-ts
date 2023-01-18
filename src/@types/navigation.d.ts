@@ -7,20 +7,37 @@ export interface MusicParams {
     duration: number
     published: boolean
     author: AuthorParams
+    date: Date
 }
 
 export interface AuthorParams {
     id: string
     name: string
-    email: string
 }
-  
-  
+
+export type UserParams = UserLogged |UserWowNotLogged;
+
+export interface UserLogged {
+    id: string
+    name: string
+    email: string
+    author: boolean
+    token: string
+    logged: true
+}
+
+export interface UserWowNotLogged {
+    logged: false
+}
+
 export declare global {
     namespace ReactNavigation {
-        interface RootParamList{
+        interface RootParamList {
             'inicio': undefined;
             'tocar': MusicParams;
+            'preload': undefined;
+            'login': undefined;
+            'historic': undefined;
         }
     }
 }
