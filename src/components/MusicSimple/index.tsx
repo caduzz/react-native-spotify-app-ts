@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
 
 import { BASE_API } from '../../service/api';
+import CustomLoading from '../CustomLoading';
 
 const Container = styled.TouchableOpacity`
     width: 100%;
@@ -37,28 +38,50 @@ interface PropsMusic {
         cover: string,
         author: {
             name: string
-        },
-        date: Date
+        }
     },
     onClick: () => void,
 } 
 
-const MusicSimple = ({ data: { title, cover, author, date }, onClick }: PropsMusic) => {
+const MusicSimple = ({ data: { title, cover, author }, onClick }: PropsMusic) => {
+    const [loading, setLoading] = useState<boolean>(true)
+
     return (
-        <Container onPress={onClick} activeOpacity={0.5}>
-            <ContentSimpleMusic>
-                <CoverMusic source={{uri: `${BASE_API}/music/cover/${cover}?resize=20`}} />
-                <TextsArea>
-                    <MusicName>
-                        {title}
-                    </MusicName>
-                    <MusicAuthor>
-                        {author.name}
-                    </MusicAuthor>
-                </TextsArea>
-            </ContentSimpleMusic>
-            {date && <MusicAuthor>{date}</MusicAuthor>}
-        </Container>
+        <>
+            {loading &&
+                <CustomLoading
+                    colorsCustom={{
+                        background: '#333',
+                        text: '#757575'
+                    }} 
+                    styleCustom={{
+                        size: {
+                            width: 40,
+                            height: 40,
+                            icon: 15
+                        },
+                        marginTop: 16,
+                        margin: 8
+                    }}
+                />
+            }
+            <Container onPress={onClick} activeOpacity={0.5}>
+                <ContentSimpleMusic>
+                    <CoverMusic 
+                        source={{uri: `${BASE_API}/music/cover/${cover}?resize=100`}}
+                        onLoad={()=>setLoading(false)}
+                    />
+                    <TextsArea>
+                        <MusicName>
+                            {title}
+                        </MusicName>
+                        <MusicAuthor>
+                            {author.name}
+                        </MusicAuthor>
+                    </TextsArea>
+                </ContentSimpleMusic>
+            </Container>
+        </>
     );
 }
 

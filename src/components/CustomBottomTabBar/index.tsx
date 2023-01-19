@@ -21,7 +21,7 @@ const TabArea = styled.View`
     align-items: center;
 `
 const TabItem = styled.TouchableOpacity`
-    padding: 8px 20px;
+    padding: 12px 20px;
     justify-content: center;
     align-items: center;
     border-radius: 12px;
@@ -46,7 +46,7 @@ const CustomBottomTabBar = ({ state, navigation }: BottomTabBarProps) => {
             <LinearGradient 
                 style={{
                     flex: 1,
-                    paddingTop: 15,
+                    paddingTop: 20,
                     flexDirection: 'column',
                     justifyContent: 'space-between'
                 }} 
@@ -61,9 +61,9 @@ const CustomBottomTabBar = ({ state, navigation }: BottomTabBarProps) => {
                         soundObj={soundObj}
                     >
                         {!soundObj.isPlaying ?
-                            <Play weight='fill' size={26} color='#fff'/>
+                            <Play weight='fill' size={22} color='#fff'/>
                             :
-                            <Pause weight='fill' size={26} color='#fff'/>
+                            <Pause weight='fill' size={22} color='#fff'/>
                         }
                     </PlayerWidget>
                 }

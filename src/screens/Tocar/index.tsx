@@ -99,7 +99,7 @@ export default () => {
                     }}
                   >
                     <MusicCover
-                      source={{uri: `${BASE_API}/music/cover/${music.cover}?resize=200`}}
+                      source={{uri: `${BASE_API}/music/cover/${music.cover}?resize=180`}}
                     />
                   </ImageThumb>
                   <MusicInfo>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Modal, ModalProps, StatusBar } from 'react-native';
 
@@ -15,6 +15,7 @@ import { convertTimer, converterMsEmSec } from '../../service/misc/numberConvert
 
 import { BASE_API } from '../../service/api';
 import useHandleMusicPlayer from '../../hooks/useHandleMusicPlayer';
+import CustomLoading from '../CustomLoading';
 
 
 export interface PlayerProps {
@@ -114,8 +115,10 @@ interface PlayerParams extends ModalProps {
 
 const PlayerModal = ({ ...rest }: PlayerParams) => {
     const {currentSound, soundObj, setMusicModal} = useContext(MusicContext);
-
+    
     const playMusic = useHandleMusicPlayer();
+
+    const [loading, setLoading] = useState<boolean>(true)
 
     return (
         <Modal
@@ -145,8 +148,26 @@ const PlayerModal = ({ ...rest }: PlayerParams) => {
                         </BtnCloseModal>
                     </PlayerModalHeader>
                     <PlayerModalBody>
+                        {loading &&
+                            <CustomLoading 
+                                colorsCustom={{
+                                    background: '#333',
+                                    text: '#757575'
+                                }} 
+                                styleCustom={{
+                                    size: {
+                                        width: 300,
+                                        height: 300,
+                                        icon: 60
+                                    },
+                                    marginTop: 0,
+                                    margin: 30
+                                }}
+                            />       
+                        }                     
                         <PlayerModalCover 
-                            source={{uri: `${BASE_API}/music/cover/${currentSound.cover}?resize=120`}}
+                            source={{uri: `${BASE_API}/music/cover/${currentSound.cover}?resize=400`}}
+                            onLoad={()=>setLoading(false)}
                         />
 
                         <MusicTextInfos>

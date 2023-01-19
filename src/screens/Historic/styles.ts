@@ -1,5 +1,9 @@
 import styled from 'styled-components/native';
 
+interface props {
+    color: string
+}
+
 export const Container = styled.SafeAreaView`
     flex: 1;
     background-color: #121214;
@@ -25,6 +29,22 @@ export const HeaderTitle = styled.Text`
     color: #fff;
 `
 
-export const ScrollHitoricMusic = styled.FlatList`
-    padding: 8px
+export const ScrollHitoricMusic = styled.SectionList`
+
 `;
+
+export const SectionHeader = styled.View`
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-top: 2px
+`;
+
+export const SectionTitle = styled.Text`
+    padding: 5px 8px;
+    border-radius: 12px; 
+    background-color: ${(p: props) => p.color};
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+`

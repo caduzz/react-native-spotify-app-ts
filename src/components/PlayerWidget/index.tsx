@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext } from 'react'
+import React, { ReactNode, useContext, useState } from 'react'
 import styled from 'styled-components/native';
 
 import { HeartStraight } from 'phosphor-react-native';
@@ -10,6 +10,7 @@ import { BASE_API } from '../../service/api';
 import { AVPlaybackStatus } from 'expo-av';
 
 import SliderPlayer from '../SliderPlayer/indenx';
+import CustomLoading from '../CustomLoading';
 
 export interface PlayerProps {
     bgColor: string
@@ -74,6 +75,7 @@ interface PlayerParams {
 }
 
 const PlayerWidget = ({ music, children, openModal, onClick, soundObj }: PlayerParams) => {
+    const [loading, setLoading] = useState<boolean>(true)
     return (
         <Container>
             { music.published &&
@@ -84,7 +86,28 @@ const PlayerWidget = ({ music, children, openModal, onClick, soundObj }: PlayerP
             >
                 <MusicContent>
                     <MusicInfos>
-                        <MusicCover source={{uri: `${BASE_API}/music/cover/${music.cover}?resize=20`}}/>
+                        {loading &&
+                            <CustomLoading 
+                                colorsCustom={{
+                                    background: '#333',
+                                    text: '#757575'
+                                }} 
+                                styleCustom={{
+                                    size: {
+                                        width: 40,
+                                        height: 40,
+                                        icon: 10
+                                    },
+                                    marginTop: 0,
+                                    margin: 0,
+                                    radius: 5
+                                }}
+                            />
+                        }      
+                        <MusicCover 
+                            source={{uri: `${BASE_API}/music/cover/${music.cover}?resize=120`}}
+                            onLoad={()=>setLoading(false)}
+                        />
                         <MusicTextArea>
                             <MusicName>
                                 {music.title}
@@ -96,7 +119,7 @@ const PlayerWidget = ({ music, children, openModal, onClick, soundObj }: PlayerP
                     </MusicInfos>
                     <MusicInfos>
                         <BtnActions>
-                            <HeartStraight weight='regular' size={26} color="#fff"/>
+                            <HeartStraight weight='regular' size={28} color="#fff"/>
                         </BtnActions>
                         <BtnActions onPress={onClick}>
                             { children }

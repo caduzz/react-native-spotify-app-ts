@@ -1,7 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
+
+import { LinearGradient } from 'expo-linear-gradient';
+import { MusicNotesSimple } from 'phosphor-react-native';
+
 import styled from 'styled-components/native';
 import { MusicParams } from '../../@types/music';
 import { BASE_API } from '../../service/api';
+import CustomLoading from '../CustomLoading';
 
 export const Container = styled.TouchableOpacity`
     flex-direction: column;
@@ -23,13 +28,37 @@ interface PropsMusic {
 } 
 
 const MusicContent = ({ data, onClick }: PropsMusic) => {
+    const [loading, setLoading] = useState<boolean>(true)
+
     return (
-        <Container onPress={onClick} activeOpacity={0.9}>
-            <CoverMusic source={{uri: `${BASE_API}/music/cover/${data.cover}?resize=100`}} />
-            <MusicName>
-                {data.title}
-            </MusicName>
-        </Container>
+        <>
+            {loading &&
+                <CustomLoading 
+                    colorsCustom={{
+                        background: '#333',
+                        text: '#757575'
+                    }} 
+                    styleCustom={{
+                        size:{
+                            width: 150,
+                            height: 150,
+                            icon: 55
+                        },
+                        marginTop: 8, 
+                        margin: 8
+                    }}
+                />
+            }
+            <Container onPress={onClick} activeOpacity={0.9}>
+                <CoverMusic 
+                    source={{uri: `${BASE_API}/music/cover/${data.cover}?resize=200`}} 
+                    onLoad={()=>setLoading(false)}
+                />
+                <MusicName>
+                    {data.title}
+                </MusicName>
+            </Container>
+        </>
     );
 }
 

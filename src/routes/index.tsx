@@ -33,7 +33,7 @@ export function Routes() {
       await Audio.setAudioModeAsync({
         playsInSilentModeIOS: true,
         staysActiveInBackground: true,
-        shouldDuckAndroid: true
+        shouldDuckAndroid: true,
       });
     }else {
       return
